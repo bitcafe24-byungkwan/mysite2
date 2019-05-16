@@ -11,9 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-
+import com.cafe24.mysite.repository.UserDao;
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
+
 
 @Controller
 @RequestMapping("/user")
@@ -71,4 +72,44 @@ public class UserController {
 		session.invalidate();
 		return "redirect:/";
 	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.GET )
+	public String update(HttpSession session, Model model) {
+		if(session == null) {			
+			return "redirect:/";
+		}
+		
+		UserVo authUser = (UserVo)session.getAttribute("authUser");		
+		if(authUser == null) {
+			return "redirect:/";
+		}
+		
+		
+		Long userNo = authUser.getNo();
+		UserVo userVo = userService.getUser(userNo);
+		model.addAttribute("userVo", userVo);
+		
+		return "user/update";
+	}
+	
+	@RequestMapping(value = "/update", method = RequestMethod.POST )
+	public String update(@ModelAttribute UserVo userVo,HttpSession session,
+			Model model) {
+		
+		userVo.setEmail(userService.getUser(userVo.getNo()).getEmail());
+		System.out.println(userVo.toString());
+		if(!userService.updateUser(userVo)) {
+			
+			model.addAttribute("userVo", userVo);
+			model.addAttribute("result", "fail");
+			//WebUtil.forward(request, response, "WEB-INF/views/user/updateform.jsp");
+			return "user/update";
+		}
+
+		session.setAttribute("authUser", userVo);
+		
+		return "redirect:/";
+	}
+	
+	
 }

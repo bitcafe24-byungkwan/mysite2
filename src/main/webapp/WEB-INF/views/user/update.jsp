@@ -25,7 +25,7 @@
 			<div id="user">
 				
 				<form id="join-form" name="joinForm" method="post"
-					action="${pageContext.servletContext.contextPath }/user">
+					action="${pageContext.servletContext.contextPath }/user/update">
 					<input type="hidden" name="a" value="update"> <input
 						type="hidden" name="no" value="${userVo.no }"> <label
 						class="block-label" for="email">이메일</label>

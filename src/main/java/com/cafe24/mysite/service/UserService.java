@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import com.cafe24.mysite.repository.UserDao;
 import com.cafe24.mysite.vo.UserVo;
 
+
 @Service
 public class UserService {
 	@Autowired
@@ -20,6 +21,10 @@ public class UserService {
 	}
 	
 	public UserVo getUser(Long no) {
-		return null;
+		return userDao.get(no);
+	}
+	
+	public Boolean updateUser(UserVo userVo) {
+		return userDao.update(userVo);	
 	}
 }

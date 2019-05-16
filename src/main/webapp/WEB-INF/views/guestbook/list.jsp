@@ -21,8 +21,7 @@
 		<div id="content">
 			<div id="guestbook">
 				<form action="${pageContext.servletContext.contextPath }/guestbook"
-					method="post">
-					<input type="hidden" name="a" value="add">
+					method="post">					
 					<table>
 						<tr>
 							<td>이름</td>
@@ -42,18 +41,20 @@
 					<c:set var='count' value='${fn:length(list) }'/>
 					<c:forEach items='${list }' var='vo' varStatus='status'>
 						<li>
+						<form action="">
 							<table>
 								<tr>
 									<td>[${count - status.index }]</td>
 									<td>${vo.name }</td>
 									<td>${vo.regDate }</td>
 									<td><a
-										href="${pageContext.servletContext.contextPath }/guestbook?a=deleteform&no=${vo.no }">삭제</a></td>
+										href="${pageContext.servletContext.contextPath }/guestbook/delete?no=${vo.no }">삭제</a></td>
 								</tr>
 								<tr>
 									<td colspan=4>${fn:replace(vo.contents, newline, "<br>") }</td>
 								</tr>
 							</table> <br>
+						</form>
 						</li>
 					</c:forEach>
 
