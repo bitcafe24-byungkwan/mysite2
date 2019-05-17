@@ -16,7 +16,15 @@
 		window.onload = function(){			
 			document.getElementById("${userVo.gender}").checked = true;
 		};
+		
 	</script>
+	
+	<c:if test='${requestScope.result == "success" }'>
+	<script>
+		alert( "정상적으로 수정 하였습니다." );
+		window.location.href = '${pageContext.servletContext.contextPath }/';
+	</script>
+</c:if>
 </head>
 <body>
 	<div id="container">

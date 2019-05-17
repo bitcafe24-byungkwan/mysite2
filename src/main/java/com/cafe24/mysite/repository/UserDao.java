@@ -31,9 +31,7 @@ public class UserDao {
 		
 	}
 	public Boolean update(UserVo vo) {
-		System.out.println(vo.toString());
 		int count = sqlSession.update("user.update", vo);
-		System.out.println(vo.toString());
 		return 1 == count;
 	}	
 	

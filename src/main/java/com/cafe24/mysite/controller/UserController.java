@@ -105,9 +105,10 @@ public class UserController {
 			return "user/update";
 		}
 		
+		model.addAttribute("result", "success");
 		session.setAttribute("authUser", userVo);
 		
-		return "redirect:/";
+		return "user/update";
 	}
 
 }
