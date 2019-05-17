@@ -25,6 +25,11 @@ public class UserService {
 	}
 	
 	public Boolean updateUser(UserVo userVo) {
+		UserVo oldUser = getUser(userVo.getNo());
+		userVo.setEmail(oldUser.getEmail());
+		if("".equals(userVo.getName())){
+			userVo.setName(oldUser.getName());
+		}
 		return userDao.update(userVo);	
 	}
 }

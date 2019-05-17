@@ -31,6 +31,6 @@
 	
 	<!-- Controller scanning 하는 base package -->
 	<context:component-scan
-		base-package="com.cafe24.mysite.controller" />
+		base-package="com.cafe24.mysite.controller, com.cafe24.mysite.exception" />
 
 </beans>

@@ -5,12 +5,14 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.cafe24.mysite.exception.UserDaoException;
 import com.cafe24.mysite.repository.UserDao;
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
@@ -84,20 +86,17 @@ public class UserController {
 			return "redirect:/";
 		}
 		
-		
 		Long userNo = authUser.getNo();
 		UserVo userVo = userService.getUser(userNo);
 		model.addAttribute("userVo", userVo);
-		
+
 		return "user/update";
 	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.POST )
-	public String update(@ModelAttribute UserVo userVo,HttpSession session,
+	public String update(@ModelAttribute UserVo userVo, HttpSession session,
 			Model model) {
-		
-		userVo.setEmail(userService.getUser(userVo.getNo()).getEmail());
-		System.out.println(userVo.toString());
+
 		if(!userService.updateUser(userVo)) {
 			
 			model.addAttribute("userVo", userVo);
@@ -105,11 +104,10 @@ public class UserController {
 			//WebUtil.forward(request, response, "WEB-INF/views/user/updateform.jsp");
 			return "user/update";
 		}
-
+		
 		session.setAttribute("authUser", userVo);
 		
 		return "redirect:/";
 	}
-	
-	
+
 }

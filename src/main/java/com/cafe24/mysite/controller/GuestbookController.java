@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.cafe24.mysite.dao.GuestbookDao;
+
 import com.cafe24.mysite.service.GuestbookService;
 import com.cafe24.mysite.vo.GuestbookVo;
-import com.cafe24.web.WebUtil;
+
 
 
 
