@@ -11,7 +11,7 @@ import com.cafe24.mysite.vo.UserVo;
 public class UserService {
 	@Autowired
 	private UserDao userDao;
-
+	
 	public Boolean join(UserVo userVo) {
 		return userDao.insert(userVo);		
 	}
@@ -31,5 +31,11 @@ public class UserService {
 			userVo.setName(oldUser.getName());
 		}
 		return userDao.update(userVo);	
+	}
+
+	public Boolean existEmail(String email) {
+		UserVo vo = userDao.get(email, "%%");
+		
+		return vo != null;
 	}
 }

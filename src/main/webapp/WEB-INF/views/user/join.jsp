@@ -14,6 +14,49 @@
 <link
 	href="${pageContext.servletContext.contextPath }/assets/css/user.css"
 	rel="stylesheet" type="text/css">
+	<script src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+	
+<script>
+$(function(){
+	$('#email').change(function(){
+		$('#check-button').show();
+		$('#check-image').hide();
+	});
+	$('#check-button').click(function(){
+		var email = $('#email').val();
+		if(email == '') return;
+		
+		// ajax comm 
+		$.ajax({
+			url: "${pageContext.servletContext.contextPath }/user/api/checkemail?email=" + email,
+			type:"get",
+			dataType:"json",
+			data:"",
+			success:function(response){
+				if(response.result != "success"){
+					console.error(response.message);
+					console.log(response);
+					return;
+				}
+				
+				if(response.data == true){	
+					alert('이미 존재하는 이메일입니다.\n다른 이메일 ㄱㄱ')
+					$('#email').focus().val("");
+					
+					return;
+				}
+				$('#check-button').hide();
+				$('#check-image').show();
+			},
+			error:function(hxr,msg){
+				console.error("error:" + msg);
+			}
+		})
+		console.log(email);
+	})
+});
+	
+</script>
 </head>
 <body>
 	<div id="container">
@@ -28,8 +71,13 @@
 						class="block-label" for="name">이름</label> <input id="name"
 						name="name" type="text" value=""> <label
 						class="block-label" for="email">이메일</label> <input id="email"
-						name="email" type="text" value=""> <input type="button"
-						value="id 중복체크"> <label class="block-label">패스워드</label> <input
+						name="email" type="text" value=""> <input type="button" id = "check-button" 
+						value="체크"> 
+						
+						<img style ="display:none" id = "check-image" src ="${pageContext.servletContext.contextPath }/assets/images/check.png">
+						
+						
+						<label class="block-label">패스워드</label> <input
 						name="password" type="password" value="">
 
 					<fieldset>
