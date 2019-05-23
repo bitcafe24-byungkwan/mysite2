@@ -5,7 +5,7 @@
 	<insert id="insert" parameterType="uservo">
 	<![CDATA[
 	insert into user
-		values(null,#{name },#{email },#{password },#{gender },now())					
+		values(null,#{name },#{email },#{password },#{gender },'USER',now())					
 	]]>
 	<selectKey keyProperty="no" resultType="long" order="AFTER">
 	<![CDATA[
@@ -16,7 +16,7 @@
 	
 	<select id="getByEmailAndPassword" resultType="uservo" parameterType='map'>
 	<![CDATA[
-	select no, name from user
+	select no, name, role from user
 		where email=#{email } and password like #{password }					
 	]]>
 	</select>

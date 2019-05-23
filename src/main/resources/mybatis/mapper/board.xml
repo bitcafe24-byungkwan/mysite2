@@ -60,7 +60,7 @@ order by a.group_no desc, a.order_no asc;
 			, contents = #{contents }
 			, reg_date = now()
 
-	where no= #{no}			
+	where no= #{no} and user_no = #{userNo}		
 	]]>
 	</update>
 	

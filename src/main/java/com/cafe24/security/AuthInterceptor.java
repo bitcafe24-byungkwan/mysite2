@@ -8,6 +8,7 @@ import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
 import com.cafe24.mysite.vo.UserVo;
+import com.cafe24.mysite.vo.UserVo.UserRole;
 import com.cafe24.security.Auth.Role;
 
 public class AuthInterceptor extends HandlerInterceptorAdapter {
@@ -26,11 +27,11 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		//3. Method의 @Auth 받아오기
 		Auth auth = handlerMethod.getMethodAnnotation(Auth.class);
 		
-//		//4. HandlerMethod에 @Auth 없으면 Class(Type)에 @Auth를 받아오기
-//		if(auth == null) {
-//			// TODO 과제
-//			return true;			
-//		}
+		//4. HandlerMethod에 @Auth 없으면 Class(Type)에 @Auth를 받아오기
+		if(auth == null) {
+			//auth = handlerMethod.get(Auth.class);		
+			auth = handlerMethod.getBeanType().getAnnotation(Auth.class);
+		}		
 		
 		//5. @Auth가 안 붙어있는 경우
 		if(auth == null) return true;			
@@ -54,8 +55,19 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		
 		//8. role이 USER 라면
 		//   인증된 모든 사용자는 접근 가능
+
 		if(role == Role.USER) {
+			response.sendRedirect(request.getContextPath());
 			return true;
+		}
+
+		if(role == Role.ADMIN) {
+			
+			if (authUser.getRole() != UserRole.ADMIN) {
+				response.sendRedirect(request.getContextPath());
+				return false;
+			}
+			
 		}
 		
 		//9. Admin Role 접근 check

@@ -33,6 +33,11 @@
 				</property>
 			</bean>
 		</mvc:message-converters>
+		
+		<!-- Argument-resolvers -->
+		<mvc:argument-resolvers>
+			<bean class = "com.cafe24.security.AuthUserHndlerMethodArgumentResolver" />
+		</mvc:argument-resolvers>
 	</mvc:annotation-driven>
 
 	<!-- 2. 서블릿 컨테이너의 디폴트 서블릿 위임 핸들러 -->
@@ -57,6 +62,7 @@
 		</property>
 	</bean>
 
+
    <!-- Interceptors -->
    
    <!-- 
@@ -72,11 +78,12 @@
         	<mvc:mapping path="/user/auth" /> 
     		<bean class="com.cafe24.security.AuthLoginInterceptor" />
         </mvc:interceptor>
-        
+
         <mvc:interceptor>
         	<mvc:mapping path="/user/logout" /> 
-    	<bean class="com.cafe24.security.AuthLogoutInterceptor" />
+    		<bean class="com.cafe24.security.AuthLogoutInterceptor" />
         </mvc:interceptor>
+
         
         <mvc:interceptor>
         	<mvc:mapping path="/**/" />
@@ -84,8 +91,14 @@
         	<mvc:exclude-mapping path="/user/logout"/> 
         	<mvc:exclude-mapping path="/assets/*"/>
     		<bean class="com.cafe24.security.AuthInterceptor" />
-        </mvc:interceptor>  
+        </mvc:interceptor>
     </mvc:interceptors>	
+    
+    	<!-- the mvc resources tag does the magic -->
+	<mvc:resources mapping="/images/**"
+		location="file:/mysite-uploads/" />
+    
+    
 	<!-- 빈 설정을 annotation으로 하겠다 (@Controller에 auto scanning) -->
 	<context:annotation-config />
 	

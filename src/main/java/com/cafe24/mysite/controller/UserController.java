@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.cafe24.mysite.service.UserService;
 import com.cafe24.mysite.vo.UserVo;
+import com.cafe24.security.AuthUser;
 
 
 @Controller
@@ -81,20 +82,20 @@ public class UserController {
 //		return "redirect:/";
 //	}
 //	
-//	@RequestMapping(value = "/logout", method = RequestMethod.GET )
-//	public String logout(HttpSession session) {
-//		session.removeAttribute("authUser");
-//		session.invalidate();
-//		return "redirect:/";
-//	}
+	@RequestMapping(value = "/logout", method = RequestMethod.GET )
+	public String logout(HttpSession session) {
+		session.removeAttribute("authUser");
+		session.invalidate();
+		return "redirect:/";
+	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET )
-	public String update(HttpSession session, Model model) {
+	public String updateForm(@AuthUser UserVo authUser, HttpSession session, Model model) {
 		if(session == null) {			
 			return "redirect:/";
 		}
 		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");		
+		//UserVo authUser = (UserVo)session.getAttribute("authUser");		
 		if(authUser == null) {
 			return "redirect:/";
 		}

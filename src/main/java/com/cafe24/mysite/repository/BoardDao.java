@@ -23,7 +23,7 @@ public class BoardDao {
 	}
 	
 	public Boolean update(BoardVo vo) {
-		int count = sqlSession.selectOne("board.update", vo);	
+		int count = sqlSession.update("board.update", vo);	
 		return 1 == count;
 	}
 

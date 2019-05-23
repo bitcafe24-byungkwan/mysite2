@@ -20,6 +20,8 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/modify/${vo.no }">
+					<input type="hidden" name="userNo" value="${authUser.no }">
+					<input type="hidden" name="no" value="${vo.no }">
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글수정</th>

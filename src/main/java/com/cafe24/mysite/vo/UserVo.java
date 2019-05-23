@@ -5,6 +5,12 @@ import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotEmpty;
 
 public class UserVo {
+	public enum UserRole{
+		USER,
+		ADMIN
+	}
+	
+	
 	private Long no;
 	
 	@NotEmpty
@@ -17,6 +23,16 @@ public class UserVo {
 	private String password;
 	private String gender;
 	private String joinDate;
+	private UserRole role;
+	
+	
+	public UserRole getRole() {
+		return role;
+	}
+	public void setRole(UserRole role) {
+		this.role = role;
+	}
+	
 	public UserVo(String email, String password) {
 
 		this.email = email;

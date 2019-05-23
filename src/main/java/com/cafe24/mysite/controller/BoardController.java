@@ -2,7 +2,7 @@ package com.cafe24.mysite.controller;
 
 import java.util.List;
 
-import javax.servlet.http.HttpSession;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -18,8 +18,8 @@ import com.cafe24.mysite.service.BoardService;
 import com.cafe24.mysite.vo.BoardVo;
 import com.cafe24.mysite.vo.BoardVo.StatusType;
 import com.cafe24.security.Auth;
+import com.cafe24.security.AuthUser;
 import com.cafe24.security.Auth.Role;
-import com.cafe24.mysite.vo.GuestbookVo;
 import com.cafe24.mysite.vo.UserVo;
 
 
@@ -45,26 +45,26 @@ public class BoardController {
 		return "redirect:/board/1";
 	}
 	
-	//@Auth(role=Role.USER )
+	@Auth(role=Role.USER )
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
 	public String addView() {		
 		return "board/write";
 	}
 	
-	
+	@Auth(role=Role.USER )
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
-	public String add(@ModelAttribute BoardVo boardVo, HttpSession session,
+	public String add(@ModelAttribute BoardVo boardVo, @AuthUser UserVo authUser,
 			Model model) {
-		if(session == null) {			
-			return "redirect:/";
-		}
-		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");	
-		
-		if(authUser == null) {
-			return "redirect:/";
-		}
-		
+//		if(session == null) {			
+//			return "redirect:/";
+//		}
+//		
+//		UserVo authUser = (UserVo)session.getAttribute("authUser");	
+//		
+//		if(authUser == null) {
+//			return "redirect:/";
+//		}
+//		
 		boardVo.setUserNo(authUser.getNo());
 	
 			
@@ -84,14 +84,11 @@ public class BoardController {
 		return "board/view";
 	}
 	
-	
+	@Auth(role=Role.USER )
 	@RequestMapping(value = "/modify/{id:[\\d]+}", method = RequestMethod.GET)
-	public String modifyView(@PathVariable Long id,Model model, HttpSession session) {
+	public String modifyView(@PathVariable Long id,Model model, @AuthUser UserVo authUser) {
 		
-		if(session == null) {			
-			return "redirect:/board";
-		}
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+
 		BoardVo vo = boardService.getWriting(id);
 		if(authUser == null || 
 				vo==null ||
@@ -104,40 +101,31 @@ public class BoardController {
 		return "board/modify";
 	}
 	
+	@Auth(role = Role.USER)
 	@RequestMapping(value = "/modify/{id:[\\d]+}", method = RequestMethod.POST)
 	public String modify(@PathVariable Long id,
 			@ModelAttribute BoardVo updateVo,
-			Model model, HttpSession session) {
+			Model model) {
 		
-		if(session == null) {			
-			return "redirect:/board";
-		}
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
 		BoardVo vo = boardService.getWriting(id);
 
-		if(authUser == null || 
-				vo==null ||
+		if(	vo==null ||
 				vo.getStatus()==StatusType.DELETED ||
-				authUser.getNo() != vo.getUserNo()) {
+				updateVo.getUserNo() != vo.getUserNo()) {
 			return "redirect:/board";
 		}
 
-		vo.setTitle(updateVo.getTitle());
-		vo.setContents(updateVo.getContents());
-
-		boardService.updateWriting(vo);		
+		System.out.println(updateVo);
+		boardService.updateWriting(updateVo);		
 		
 		return "redirect:/board/view/"+id;
 	}
 	
+	@Auth(role = Role.USER)
 	@RequestMapping(value = "/delete/{id:[\\d]+}", method = RequestMethod.GET)
 	public String delete(@PathVariable Long id,
-			Model model, HttpSession session) {
-		
-		if(session == null) {			
-			return "redirect:/board";
-		}
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
+			Model model, @AuthUser UserVo authUser) {
+
 		BoardVo vo = boardService.getWriting(id);
 
 		if(authUser == null || 
@@ -151,21 +139,11 @@ public class BoardController {
 		return "redirect:/board";
 	}
 	
-	
+	@Auth(role = Role.USER)
 	@RequestMapping(value = "/write/{id:[\\d]+}", method = RequestMethod.GET)
-	public String addReply(@PathVariable Long id,Model model, HttpSession session) {
-		if(session == null) {			
-			return "redirect:/board";
-		}
-		UserVo authUser = (UserVo)session.getAttribute("authUser");
-		BoardVo vo = boardService.getWriting(id);
+	public String addReply(@PathVariable Long id,Model model) {
 
-		if(authUser == null || 
-				vo==null ||
-				vo.getStatus()==StatusType.DELETED ||
-				authUser.getNo() != vo.getUserNo()) {
-			return "redirect:/board";
-		}
+		BoardVo vo = boardService.getWriting(id);
 		
 		//System.out.println(vo.toString());
 		model.addAttribute("originVo",vo);
