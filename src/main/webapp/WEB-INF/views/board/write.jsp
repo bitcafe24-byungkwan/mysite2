@@ -19,14 +19,26 @@
 		<div id="content">
 			<div id="board">
 				<form class="board-form" method="post" action="${pageContext.servletContext.contextPath }/board/write">
-					<input type = "hidden" name = "a" value="write">
+					
+					<c:if test = "${not empty originVo}">
+					<a href="${pageContext.servletContext.contextPath }/board/view/${originVo.no}">${originVo.title }</a>의 답글쓰기 ㅎㅎ
+					<input type = "hidden" name = "no" value="${originVo.no}">
+					<script type="text/javascript">
+					window.onload = function(){	
+						document.getElementById("wTitle").value = "[Re]${originVo.title}";
+					};
+					</script>
+					</c:if>					
+					
 					<table class="tbl-ex">
 						<tr>
 							<th colspan="2">글쓰기</th>
 						</tr>
 						<tr>
 							<td class="label">제목</td>
-							<td><input type="text" name="title" value=""></td>
+
+
+							<td><input id="wTitle" type="text" name="title" value=""></td>
 						</tr>
 						<tr>
 							<td class="label">내용</td>

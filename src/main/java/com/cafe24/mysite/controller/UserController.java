@@ -62,30 +62,31 @@ public class UserController {
 		return "/user/login";
 	}
 	
-	@RequestMapping(value = "/login", method = RequestMethod.POST )
-	public String login(
-			@RequestParam(value="email",required=true,defaultValue = "") String email,
-			@RequestParam(value="password",required=true,defaultValue = "") String password,
-			HttpSession session,
-			Model model) {
-		//UserVo authUser =userDao.get();		
-		UserVo authUser = userService.getUser(new UserVo(email, password));
-		if(authUser == null) {
-			model.addAttribute("result", "fail");
-			return "user/login";
-		}
-		
-		// session 처리
-		session.setAttribute("authUser", authUser);
-		return "redirect:/";
-	}
-	
-	@RequestMapping(value = "/logout", method = RequestMethod.GET )
-	public String logout(HttpSession session) {
-		session.removeAttribute("authUser");
-		session.invalidate();
-		return "redirect:/";
-	}
+//	@RequestMapping(value = "/login", method = RequestMethod.POST )
+//	public String login(
+//			@RequestParam(value="email",required=true,defaultValue = "") String email,
+//			@RequestParam(value="password",required=true,defaultValue = "") String password,
+//			HttpSession session,
+//			Model model) {
+//		//UserVo authUser =userDao.get();	
+//		
+//		UserVo authUser = userService.getUser(new UserVo(email, password));
+//		if(authUser == null) {
+//			model.addAttribute("result", "fail");
+//			return "user/login";
+//		}
+//		
+//		// session 처리
+//		session.setAttribute("authUser", authUser);
+//		return "redirect:/";
+//	}
+//	
+//	@RequestMapping(value = "/logout", method = RequestMethod.GET )
+//	public String logout(HttpSession session) {
+//		session.removeAttribute("authUser");
+//		session.invalidate();
+//		return "redirect:/";
+//	}
 	
 	@RequestMapping(value = "/update", method = RequestMethod.GET )
 	public String update(HttpSession session, Model model) {

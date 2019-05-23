@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import com.cafe24.mysite.service.BoardService;
 import com.cafe24.mysite.vo.BoardVo;
 import com.cafe24.mysite.vo.BoardVo.StatusType;
+import com.cafe24.security.Auth;
+import com.cafe24.security.Auth.Role;
 import com.cafe24.mysite.vo.GuestbookVo;
 import com.cafe24.mysite.vo.UserVo;
 
@@ -33,8 +35,8 @@ public class BoardController {
 		List<BoardVo> list = boardService.getList();
 		
 		model.addAttribute("list", list);
-		for(BoardVo vo : list)
-			System.out.println(vo);
+//		for(BoardVo vo : list)
+//			System.out.println(vo);
 		return "board/list";
 	}
 	
@@ -43,11 +45,13 @@ public class BoardController {
 		return "redirect:/board/1";
 	}
 	
+	//@Auth(role=Role.USER )
 	@RequestMapping(value = "/write", method = RequestMethod.GET)
-	public String addView() {
-		
+	public String addView() {		
 		return "board/write";
 	}
+	
+	
 	@RequestMapping(value = "/write", method = RequestMethod.POST)
 	public String add(@ModelAttribute BoardVo boardVo, HttpSession session,
 			Model model) {
@@ -55,14 +59,17 @@ public class BoardController {
 			return "redirect:/";
 		}
 		
-		UserVo authUser = (UserVo)session.getAttribute("authUser");		
+		UserVo authUser = (UserVo)session.getAttribute("authUser");	
+		
 		if(authUser == null) {
 			return "redirect:/";
 		}
-		boardVo.setUserNo(authUser.getNo());
 		
-		boardService.write(boardVo);
-		return "redirect:/board/view/" + boardVo.getNo();
+		boardVo.setUserNo(authUser.getNo());
+	
+			
+		return "redirect:/board/view/" + boardService.write(boardVo);
+		
 	}
 	
 	@RequestMapping(value = "/view/{id:[\\d]+}", method = RequestMethod.GET)
@@ -121,5 +128,47 @@ public class BoardController {
 		boardService.updateWriting(vo);		
 		
 		return "redirect:/board/view/"+id;
+	}
+	
+	@RequestMapping(value = "/delete/{id:[\\d]+}", method = RequestMethod.GET)
+	public String delete(@PathVariable Long id,
+			Model model, HttpSession session) {
+		
+		if(session == null) {			
+			return "redirect:/board";
+		}
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		BoardVo vo = boardService.getWriting(id);
+
+		if(authUser == null || 
+				vo==null ||
+				vo.getStatus()==StatusType.DELETED ||
+				authUser.getNo() != vo.getUserNo()) {
+			return "redirect:/board";
+		}
+
+		boardService.disableWriting(id);		
+		return "redirect:/board";
+	}
+	
+	
+	@RequestMapping(value = "/write/{id:[\\d]+}", method = RequestMethod.GET)
+	public String addReply(@PathVariable Long id,Model model, HttpSession session) {
+		if(session == null) {			
+			return "redirect:/board";
+		}
+		UserVo authUser = (UserVo)session.getAttribute("authUser");
+		BoardVo vo = boardService.getWriting(id);
+
+		if(authUser == null || 
+				vo==null ||
+				vo.getStatus()==StatusType.DELETED ||
+				authUser.getNo() != vo.getUserNo()) {
+			return "redirect:/board";
+		}
+		
+		//System.out.println(vo.toString());
+		model.addAttribute("originVo",vo);
+		return "board/write";
 	}
 }

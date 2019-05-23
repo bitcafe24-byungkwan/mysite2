@@ -23,11 +23,28 @@ public class BoardDao {
 	}
 	
 	public Boolean update(BoardVo vo) {
-		return sqlSession.selectOne("board.update", vo);		
+		int count = sqlSession.selectOne("board.update", vo);	
+		return 1 == count;
 	}
 
 	public List<BoardVo> getList() {
 		List<BoardVo> result=sqlSession.selectList("board.getList");
 		return result;
+	}
+
+	public Boolean disable(Long no) {
+		int count = sqlSession.update("board.disableStatus", no);	
+		return 1 == count;
+	}
+
+	public Boolean pushOrderNum(BoardVo vo) {
+		sqlSession.update("board.pushOrderNum", vo);	
+		return true;
+		
+	}
+
+	public Boolean insertRefly(BoardVo vo) {
+		int count = sqlSession.insert("board.insertRefly", vo);		
+		return 1 == count;
 	}
 }

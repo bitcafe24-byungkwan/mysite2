@@ -13,11 +13,29 @@ public class BoardService {
 	@Autowired
 	BoardDao boardDao;
 	
-	public Boolean write(BoardVo vo) {
-		boardDao.insert(vo);
-		return true;
+	public Long write(BoardVo vo) {
+		if(vo.getNo() == null) //origin
+		{			
+			boardDao.insert(vo);
+			
+		}
+		else   //rep
+		{
+			Long id = vo.getNo();
+			BoardVo oldVo = getWriting(id);
+
+			vo.setGroupNo(oldVo.getGroupNo());
+			vo.setOrderNo(oldVo.getOrderNo()+1);
+			vo.setDepth(oldVo.getDepth()+1);
+			
+			if(!boardDao.pushOrderNum(vo))
+				return -1L;	
+			boardDao.insertRefly(vo);
+		}
+		return vo.getNo();
 	}
 	
+
 	public BoardVo getWriting(Long no) {
 		return boardDao.get(no);
 	}
@@ -28,5 +46,9 @@ public class BoardService {
 
 	public List<BoardVo> getList() {		
 		return boardDao.getList();
+	}
+	
+	public Boolean disableWriting(Long no) {
+		return boardDao.disable(no);		
 	}
 }

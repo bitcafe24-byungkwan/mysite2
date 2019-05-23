@@ -22,12 +22,32 @@ order by a.group_no desc, a.order_no asc;
 	<![CDATA[
 	select last_insert_id()					
 	]]>
-	</selectKey>								
+	</selectKey>	
+	</insert>
+	<update id="pushOrderNum" parameterType="boardvo">
+	<![CDATA[
+	update board  
+		set order_no = order_no +1 
+	where order_no >= #{orderNo} and group_no = #{groupNo}			
+	]]>
+	</update>
+	
+	<insert id="insertRefly" parameterType="boardvo">
+	<![CDATA[
+	insert into board
+		values(null,#{title },#{contents },0,now(),#{groupNo},#{orderNo},#{depth},#{userNo},'ACTIVE')					
+	]]>
+	<selectKey keyProperty="no" resultType="long" order="AFTER">
+	<![CDATA[
+	select last_insert_id()					
+	]]>
+	</selectKey>							
 	</insert>	
 
 	<select id="getByNo" resultType="boardvo" parameterType='long'>
 	<![CDATA[
-	select no,title,contents,user_no as userNo, status
+	select no,title,contents,user_no as userNo, status, depth, 
+	order_no as orderNo, group_no as groupNo 
 		from board  
 		where no= #{value }				
 	]]>
@@ -40,7 +60,16 @@ order by a.group_no desc, a.order_no asc;
 			, contents = #{contents }
 			, reg_date = now()
 
-	where no=#{no}			
+	where no= #{no}			
+	]]>
+	</update>
+	
+	<update id="disableStatus" parameterType="long">
+	<![CDATA[
+	update board  
+		set status = 'DELETED'
+	
+	where no=#{value}			
 	]]>
 	</update>
 </mapper>

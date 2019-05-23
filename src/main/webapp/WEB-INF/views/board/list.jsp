@@ -36,21 +36,34 @@
 						<c:choose>
 						<c:when test='${vo.status == "ACTIVE" }'>
 							<td>${vo.no }</td>
-							<td style="text-align:left; padding-left:${20*0}px"><img
-								src='${pageContext.servletContext.contextPath }/assets/images/reply.png'><a
-								href="${pageContext.servletContext.contextPath }/board/view/${vo.no}">${vo.title} </a></td>
+							<td style="text-align:left; padding-left:${20*vo.depth}px">
+							<c:if test="${vo.depth }>0">
+							<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png'>
+							</c:if>
+							<a href="${pageContext.servletContext.contextPath }/board/view/${vo.no}">${vo.title} </a></td>
 							<td>${vo.userName }</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<td><a href="" class="del">삭제</a></td>
+							<c:choose>
+							<c:when test='${vo.userNo == authUser.no }'>
+								<td><a href="${pageContext.servletContext.contextPath }/board/delete/${vo.no }" class="del">삭제</a></td>
+							</c:when>
+							<c:otherwise>
+								<td>-</td>
+							</c:otherwise>
+							</c:choose>
 						</c:when>
 						<c:otherwise>
 							<td>-</td>
-							<td style = "text-align:left;">삭제된 게시물 ㅎ </td>
+							<td style = "text-align:left; padding-left:${20*vo.depth}px">
+							<c:if test="${vo.depth }>0">
+							<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png'>
+							</c:if>
+							삭제된 게시물 ㅎ </td>
 							<td>-</td>
 							<td>${vo.hit }</td>
 							<td>${vo.regDate }</td>
-							<td></td>
+							<td>-</td>
 						</c:otherwise>
 						</c:choose>
 						</tr>
