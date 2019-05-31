@@ -16,9 +16,6 @@ import com.cafe24.mysite.service.GuestbookService;
 import com.cafe24.mysite.vo.GuestbookVo;
 
 
-
-
-
 @Controller
 @RequestMapping("/guestbook")
 public class GuestbookController {

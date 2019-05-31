@@ -30,7 +30,7 @@
 						<th>작성일</th>
 						<th>&nbsp;</th>
 					</tr>
-
+					<c:set var='indexer' value='${fn:length(list) }'/>
 					<c:forEach items='${list }' var='vo' varStatus='status'>
 						<tr>
 						<c:choose>
