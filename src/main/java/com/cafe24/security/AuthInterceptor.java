@@ -57,7 +57,7 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
 		//   인증된 모든 사용자는 접근 가능
 
 		if(role == Role.USER) {
-			response.sendRedirect(request.getContextPath());
+			//response.sendRedirect(request.getContextPath());
 			return true;
 		}
 

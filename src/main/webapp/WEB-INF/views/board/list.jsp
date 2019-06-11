@@ -56,7 +56,8 @@
 						<c:otherwise>
 							<td>-</td>
 							<td style = "text-align:left; padding-left:${20*vo.depth}px">
-							<c:if test="${vo.depth }>0">
+							<c:if test="${vo.depth } > 0">
+							${pageContext.servletContext.contextPath }/assets/images/reply.png
 							<img src='${pageContext.servletContext.contextPath }/assets/images/reply.png'>
 							</c:if>
 							삭제된 게시물 ㅎ </td>

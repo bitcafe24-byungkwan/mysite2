@@ -16,8 +16,9 @@
 <link
 	href="${pageContext.servletContext.contextPath }/assets/css/user.css"
 	rel="stylesheet" type="text/css">
+
 <script
-	src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js"></script>
+	src="${pageContext.servletContext.contextPath }/assets/js/jquery/jquery-1.9.0.js" ></script>
 
 <script>
 $(function(){

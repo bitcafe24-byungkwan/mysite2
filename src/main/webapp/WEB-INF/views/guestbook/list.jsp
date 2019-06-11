@@ -20,7 +20,7 @@
 		<c:import url='/WEB-INF/views/includes/header.jsp' />
 		<div id="content">
 			<div id="guestbook">
-				<form action="${pageContext.servletContext.contextPath }/guestbook/write"
+				<form action="${pageContext.servletContext.contextPath }/guestbook"
 					method="post">					
 					<table>
 						<tr>
